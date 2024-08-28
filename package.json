@@ -1,0 +1,12 @@
+{
+  "name": "cursor-rules-generator",
+  "version": "1.0.0",
+  "description": "生成 Cursor AI 规则文件的工具",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": ["cursor", "ai", "rules", "generator"],
+  "author": "trampboy",
+  "license": "MIT"
+}
