@@ -77,19 +77,42 @@ ${language === 'ruby' || projectType === 'react' ? '您还使用最新版本的T
 }
 
 // 用户交互
-rl.question('选择项目类型 (nodejs/react/ruby): ', (projectType) => {
-  if (projectType === 'ruby') {
-    const rules = generateRules('ruby', 'rails', 'ruby');
-    writeRules(rules);
-  } else {
-    rl.question(`选择框架 (${projectType === 'nodejs' ? 'express/nestjs/none' : 'umijs/nextjs/none'}): `, (framework) => {
-      rl.question('选择语言 (javascript/typescript): ', (language) => {
-        const rules = generateRules(projectType, framework, language);
-        writeRules(rules);
-      });
-    });
-  }
-});
+function askProjectType() {
+  rl.question('选择项目类型 (nodejs/react): ', (projectType) => {
+    if (!['nodejs', 'react'].includes(projectType)) {
+      console.log('无效的项目类型，请重新选择。');
+      askProjectType();
+    } else {
+      askFramework(projectType);
+    }
+  });
+}
+
+function askFramework(projectType) {
+  const frameworks = projectType === 'nodejs' ? ['express', 'nestjs', 'none'] : ['umijs', 'nextjs', 'none'];
+  rl.question(`选择框架 (${frameworks.join('/')}): `, (framework) => {
+    if (!frameworks.includes(framework)) {
+      console.log('无效的框架选择，请重新选择。');
+      askFramework(projectType);
+    } else {
+      askLanguage(projectType, framework);
+    }
+  });
+}
+
+function askLanguage(projectType, framework) {
+  rl.question('选择语言 (javascript/typescript): ', (language) => {
+    if (!['javascript', 'typescript'].includes(language)) {
+      console.log('无效的语言选择，请重新选择。');
+      askLanguage(projectType, framework);
+    } else {
+      const rules = generateRules(projectType, framework, language);
+      writeRules(rules);
+    }
+  });
+}
+
+askProjectType();
 
 function writeRules(rules) {
   fs.writeFile('.cursorrules', rules, (err) => {
