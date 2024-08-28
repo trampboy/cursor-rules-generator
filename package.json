@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "生成 Cursor AI 规则文件的工具",
   "main": "index.js",
+  "bin": {
+    "cursor-rules-generator": "./index.js"
+  },
   "scripts": {
     "start": "node index.js"
   },
